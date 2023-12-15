@@ -6,7 +6,7 @@
     "@douyinfe/semi-ui": "^2.45.2",
     "axios": "^0.27.2",
     "history": "^5.3.0",
-    "marked": "^4.1.1",
+    "marked": "^11.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
