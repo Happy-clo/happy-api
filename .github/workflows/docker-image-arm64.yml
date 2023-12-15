@@ -23,7 +23,7 @@ jobs:
 
       - name: Save version info
         run: |
-          git describe --tags > VERSION 
+          echo "VERSION=$(git describe --tags)" > $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -49,7 +49,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            justsong/one-api
+            Happy-clo/happy-api
             ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker images

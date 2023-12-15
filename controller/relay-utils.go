@@ -214,7 +214,7 @@ func errorWrapper(err error, code string, statusCode int) *OpenAIErrorWithStatus
 
 	openAIError := OpenAIError{
 		Message: text,
-		Type:    "new_api_error",
+		Type:    "happy_api_error",
 		Code:    code,
 	}
 	return &OpenAIErrorWithStatusCode{

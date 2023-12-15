@@ -24,7 +24,7 @@ export function isRoot() {
 export function getSystemName() {
   let system_name = localStorage.getItem('system_name');
   if (!system_name) return 'New API';
-  return system_name;
+  return 'Happy API';
 }
 
 export function getLogo() {

@@ -25,9 +25,7 @@ import EditToken from "../pages/Token/EditToken";
 const {Column} = Table;
 
 const COPY_OPTIONS = [
-    {key: 'next', text: 'ChatGPT Next Web', value: 'next'},
-    {key: 'ama', text: 'AMA 问天', value: 'ama'},
-    {key: 'opencat', text: 'OpenCat', value: 'opencat'},
+    {key: 'next', text: 'ChatWeb', value: 'next'},
 ];
 
 const OPEN_LINK_OPTIONS = [
@@ -150,9 +148,7 @@ const TokensTable = () => {
                         <Button theme="light" style={{ color: 'rgba(var(--semi-teal-7), 1)' }} onClick={()=>{onOpenLink('next', record.key)}}>聊天</Button>
                         <Dropdown trigger="click" position="bottomRight" menu={
                             [
-                                {node: 'item', key: 'next', name: 'ChatGPT Next Web', onClick: () => {onOpenLink('next', record.key)}},
-                                {node: 'item', key: 'ama', name: 'AMA 问天（BotGrem）', onClick: () => {onOpenLink('ama', record.key)}},
-                                {node: 'item', key: 'opencat', name: 'OpenCat', onClick: () => {onOpenLink('opencat', record.key)}},
+                                {node: 'item', key: 'next', name: 'ChatWeb', onClick: () => {onOpenLink('next', record.key)}},
                             ]
                         }
                         >

@@ -22,7 +22,7 @@ jobs:
 
       - name: Save version info
         run: |
-          git describe --tags > VERSION 
+          echo "VERSION=$(git describe --tags)" > $GITHUB_ENV
 
       - name: Translate
         run: |
@@ -38,7 +38,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            justsong/one-api-en
+            Happy-clo/happy-api-en
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
