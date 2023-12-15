@@ -3,12 +3,12 @@ name: Publish Docker image (arm64)
 on:
   push:
     tags:
-      - '*'
-      - '!*-alpha*'
+      - "*"
+      - "!*-alpha*"
   workflow_dispatch:
     inputs:
       name:
-        description: 'reason'
+        description: "reason"
         required: false
 jobs:
   push_to_registries:
@@ -49,7 +49,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            Happy-clo/happy-api
+            happyclo/happy-api
             ghcr.io/${{ github.repository }}
 
       - name: Build and push Docker images

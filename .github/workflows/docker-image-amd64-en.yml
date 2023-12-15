@@ -3,11 +3,11 @@ name: Publish Docker image (amd64, English)
 on:
   push:
     tags:
-      - '*'
+      - "*"
   workflow_dispatch:
     inputs:
       name:
-        description: 'reason'
+        description: "reason"
         required: false
 jobs:
   push_to_registries:
@@ -38,7 +38,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            Happy-clo/happy-api-en
+            happyclo/happy-api:en
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3

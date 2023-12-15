@@ -3,6 +3,8 @@ permissions:
   contents: write
 
 on:
+  schedule:
+    - cron: "0 0 * * *" # every day
   push:
 jobs:
   release:
@@ -42,9 +44,9 @@ jobs:
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          automatic_release_tag: "linux-latest"
           prerelease: false
-          title: "Happy API 自动构建最新版本"
+          title: "Happy API Linux 自动构建最新版本"
           files: |
             happy-api
             happy-api-arm64

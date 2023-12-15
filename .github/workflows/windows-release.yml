@@ -3,10 +3,9 @@ permissions:
   contents: write
 
 on:
+  schedule:
+    - cron: "0 0 * * *" # every day
   push:
-    tags:
-      - '*'
-      - '!*-alpha*'
 jobs:
   release:
     runs-on: windows-latest
@@ -32,17 +31,18 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: '>=1.18.0'
+          go-version: ">=1.18.0"
       - name: Build Backend
         run: |
           go mod download
           go build -ldflags "-s -w -X 'happy-api/common.Version=$(git describe --tags)'" -o happy-api.exe
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+
+      - name: automatic releases
+        uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
-          files: happy-api.exe
-          draft: true
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "windows-latest"
+          prerelease: false
+          title: "Happy API Windows 自动构建最新版本"
+          files: |
+            happy-api.exe
