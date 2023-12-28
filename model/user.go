@@ -31,13 +31,21 @@ type User struct {
 	AffQuota         int            `json:"aff_quota" gorm:"type:int;default:0;column:aff_quota"`           // 邀请剩余额度
 	AffHistoryQuota  int            `json:"aff_history_quota" gorm:"type:int;default:0;column:aff_history"` // 邀请历史额度
 	InviterId        int            `json:"inviter_id" gorm:"type:int;column:inviter_id;index"`
-	DeletedAt        gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+	DeletedAt        gorm.DeletedAt `gorm:"index"`
 }
 
 // CheckUserExistOrDeleted check if user exist or deleted, if not exist, return false, nil, if deleted or exist, return true, nil
 func CheckUserExistOrDeleted(username string, email string) (bool, error) {
 	var user User
-	err := DB.Unscoped().First(&user, "username = ? or email = ?", username, email).Error
+
+	// err := DB.Unscoped().First(&user, "username = ? or email = ?", username, email).Error
+	// check email if empty
+	var err error
+	if email == "" {
+		err = DB.Unscoped().First(&user, "username = ?", username).Error
+	} else {
+		err = DB.Unscoped().First(&user, "username = ? or email = ?", username, email).Error
+	}
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			// not exist, return false, nil
@@ -205,6 +213,14 @@ func (user *User) Delete() error {
 		return errors.New("id 为空！")
 	}
 	err := DB.Delete(user).Error
+	return err
+}
+
+func (user *User) HardDelete() error {
+	if user.Id == 0 {
+		return errors.New("id 为空！")
+	}
+	err := DB.Unscoped().Delete(user).Error
 	return err
 }
 
