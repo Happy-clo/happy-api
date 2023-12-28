@@ -20,10 +20,10 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/star-horizon/go-epay v0.0.0-20230204124159-fa2e2293fdc2
 	golang.org/x/crypto v0.17.0
-	gorm.io/driver/mysql v1.4.3
+	gorm.io/driver/mysql v1.5.2
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/driver/sqlite v1.4.3
-	gorm.io/gorm v1.25.0
+	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
 )
 
 require (
@@ -37,7 +37,7 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
