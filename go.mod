@@ -16,7 +16,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/pkoukk/tiktoken-go v0.1.6
-	github.com/samber/lo v1.38.1
+	github.com/samber/lo v1.39.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/star-horizon/go-epay v0.0.0-20230204124159-fa2e2293fdc2
 	golang.org/x/crypto v0.17.0
