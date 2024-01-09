@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, Col, Form, Layout, Row} from "@douyinfe/semi-ui";
+import {Button, Col, Form, Layout, Row, Spin} from "@douyinfe/semi-ui";
 import VChart from '@visactor/vchart';
 import {useEffectOnce} from "usehooks-ts";
 import {API, isAdmin, showError, timestamp2string, timestamp2string1} from "../../helpers";
-import {getQuotaWithUnit} from "../../helpers/render";
+import {getQuotaWithUnit, renderNumber, renderQuotaNumberWithDigit} from "../../helpers/render";
 
 const Detail = (props) => {
 
@@ -21,7 +21,7 @@ const Detail = (props) => {
     const initialized = useRef(false)
     const [modelDataChart, setModelDataChart] = useState(null);
     const [modelDataPieChart, setModelDataPieChart] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [quotaData, setQuotaData] = useState([]);
     const [quotaDataPie, setQuotaDataPie] = useState([]);
     const [quotaDataLine, setQuotaDataLine] = useState([]);
@@ -48,7 +48,7 @@ const Detail = (props) => {
         },
         title: {
             visible: true,
-            text: '模型消耗分布'
+            text: '模型消耗分布（小时）'
         },
         bar: {
             // The state style of bar
@@ -56,6 +56,33 @@ const Detail = (props) => {
                 hover: {
                     stroke: '#000',
                     lineWidth: 1
+                }
+            }
+        },
+        tooltip: {
+            mark: {
+                content: [
+                    {
+                        key: datum => datum['Model'],
+                        value: datum => renderQuotaNumberWithDigit(datum['Usage'], 4)
+                    }
+                ]
+            },
+            dimension: {
+                content: [
+                    {
+                        key: datum => datum['Model'],
+                        value: datum => datum['Usage']
+                    }
+                ],
+                updateContent: array => {
+                    // sort by value
+                    array.sort((a, b) => b.value - a.value);
+                    // add $
+                    for (let i = 0; i < array.length; i++) {
+                        array[i].value = renderQuotaNumberWithDigit(array[i].value, 4);
+                    }
+                    return array;
                 }
             }
         }
@@ -67,7 +94,6 @@ const Detail = (props) => {
             {
                 id: 'id0',
                 values: [
-                    { type: 'null', value: '0' },
                     { type: 'null', value: '0' },
                 ]
             }
@@ -110,7 +136,7 @@ const Detail = (props) => {
                 content: [
                     {
                         key: datum => datum['type'],
-                        value: datum => datum['value']
+                        value: datum => renderNumber(datum['value'])
                     }
                 ]
             }
@@ -133,7 +159,12 @@ const Detail = (props) => {
         if (success) {
             setQuotaData(data);
             if (data.length === 0) {
-                return;
+                data.push({
+                    'count': 0,
+                    'model_name': '无数据',
+                    'quota': 0,
+                    'created_at': now.getTime() / 1000
+                })
             }
             updateChart(lineChart, pieChart, data);
         } else {
@@ -151,13 +182,13 @@ const Detail = (props) => {
         if (!modelDataChart) {
             lineChart = new VChart(spec_line, {dom: 'model_data'});
             setModelDataChart(lineChart);
-            await lineChart.renderAsync();
+            lineChart.renderAsync();
         }
         let pieChart = modelDataPieChart
         if (!modelDataPieChart) {
             pieChart = new VChart(spec_pie, {dom: 'model_pie'});
             setModelDataPieChart(pieChart);
-            await pieChart.renderAsync();
+            pieChart.renderAsync();
         }
         console.log('init vchart');
         await loadQuotaData(lineChart, pieChart)
@@ -215,7 +246,7 @@ const Detail = (props) => {
         <>
             <Layout>
                 <Layout.Header>
-                    <h3>数据看板(24H)</h3>
+                    <h3>数据看板</h3>
                 </Layout.Header>
                 <Layout.Content>
                     <Form layout='horizontal' style={{marginTop: 10}}>
@@ -230,25 +261,27 @@ const Detail = (props) => {
                                              value={end_timestamp} type='dateTime'
                                              name='end_timestamp'
                                              onChange={value => handleInputChange(value, 'end_timestamp')}/>
-                            {/*{*/}
-                            {/*    isAdminUser && <>*/}
-                            {/*        <Form.Input field="username" label='用户名称' style={{width: 176}} value={username}*/}
-                            {/*                    placeholder={'可选值'} name='username'*/}
-                            {/*                    onChange={value => handleInputChange(value, 'username')}/>*/}
-                            {/*    </>*/}
-                            {/*}*/}
+                            {
+                                isAdminUser && <>
+                                    <Form.Input field="username" label='用户名称' style={{width: 176}} value={username}
+                                                placeholder={'可选值'} name='username'
+                                                onChange={value => handleInputChange(value, 'username')}/>
+                                </>
+                            }
                             <Form.Section>
                                 <Button label='查询' type="primary" htmlType="submit" className="btn-margin-right"
-                                        onClick={refresh}>查询</Button>
+                                        onClick={refresh} loading={loading}>查询</Button>
                             </Form.Section>
                         </>
                     </Form>
-                    <div style={{height: 500}}>
-                        <div id="model_pie" style={{width: '100%', minWidth: 100}}></div>
-                    </div>
-                    <div style={{height: 500}}>
-                        <div id="model_data" style={{width: '100%', minWidth: 100}}></div>
-                    </div>
+                    <Spin spinning={loading}>
+                        <div style={{height: 500}}>
+                            <div id="model_pie" style={{width: '100%', minWidth: 100}}></div>
+                        </div>
+                        <div style={{height: 500}}>
+                            <div id="model_data" style={{width: '100%', minWidth: 100}}></div>
+                        </div>
+                    </Spin>
                 </Layout.Content>
             </Layout>
         </>
