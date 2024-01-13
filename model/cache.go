@@ -74,7 +74,7 @@ func CacheGetUsername(id int) (username string, err error) {
 	}
 	username, err = common.RedisGet(fmt.Sprintf("user_name:%d", id))
 	if err != nil {
-		username, err = GetUserGroup(id)
+		username, err = GetUsernameById(id)
 		if err != nil {
 			return "", err
 		}
@@ -258,8 +258,8 @@ func CacheGetRandomSatisfiedChannel(group string, model string) (*Channel, error
 			return channel, nil
 		}
 	}
-	// return the last channel if no channel is found
-	return channels[endIdx-1], nil
+	// return null if no channel is not found
+	return nil, errors.New("channel not found")
 }
 
 func CacheGetChannel(id int) (*Channel, error) {
