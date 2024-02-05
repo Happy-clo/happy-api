@@ -21,9 +21,9 @@ require (
 	github.com/star-horizon/go-epay v0.0.0-20230204124159-fa2e2293fdc2
 	golang.org/x/crypto v0.17.0
 	gorm.io/driver/mysql v1.4.3
-	gorm.io/driver/postgres v1.5.2
+	gorm.io/driver/postgres v1.5.5
 	gorm.io/driver/sqlite v1.4.3
-	gorm.io/gorm v1.25.0
+	gorm.io/gorm v1.25.5
 )
 
 require (
